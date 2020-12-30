@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Showroom</title>
+    <meta name="description" content="Web Showroom"></meta>
+    <script src="https://aframe.io/releases/1.0.3/aframe.min.js"></script>
+    <script src="js/aframe-cursor-teleport-component.min.js"></script>
+    <script src="js/aframe-teleport-controls.min.js"></script>
+
+    <!-- load custom materials -->
+    <!-- <script src="models/materials.js"></script> -->
+    
+    <!-- model loader -->
+    <script src="js/loader.js"></script>
+
+  </head>
+  <body>
+    <script>
+      AFRAME.registerComponent('color-change', {
+        init: function(){
+          this.el.addEventListener('click', function(){
+            //set material color to random hex value
+            var randomColor = '#'+Math.floor(Math.random()*16777215).toString(16);
+            this.setAttribute( 'material', {color: randomColor} );
+          })
+        }
+      });
+    </script>
+
+    <a-scene cursor="rayOrigin: mouse" raycaster="objects: .clickable" renderer="colorManagement: true;">
+
+      <!-- player -->
+      <a-entity id="cameraRig" position="0 0 2.5" cursor-teleport="cameraRig: #cameraRig; cameraHead: #head; collisionEntities: .collision; ignoreEntities: .clickable">
+        <a-entity id="head" position="0 1.1 0" camera look-controls="reverseMouseDrag: true"></a-entity>
+        <a-entity
+          laser-controls="hand: left"
+          raycaster="objects: .clickable; far: 100"
+          line="color: red; opacity: 0.75"
+          teleport-controls="
+            collisionEntities: #vr-collider;
+            cameraRig: #cameraRig;
+            teleportOrigin: #head;
+            button: thumbstick;
+            curveShootingSpeed: 8"></a-entity>
+        <a-entity
+          laser-controls="hand: right"
+          raycaster="objects: .clickable"
+          line="color: red; opacity: 0.75"
+          teleport-controls="
+            collisionEntities: #vr-collider;
+            cameraRig: #cameraRig;
+            teleportOrigin: #head;
+            button: thumbstick;
+            curveShootingSpeed: 8"></a-entity>
+      </a-entity>
+
+      <!-- <a-light type="point" color="white" position="0 1.2 0"></a-light> -->
+      <a-light type="ambient" color="#FEFFF0"></a-light>
+      <!-- scene model -->
+      <a-entity class="collision" loader="path: models/Showroom2.glb"></a-entity>
+
+      <!-- collision for vr teleport controls -->
+      <!-- <a-entity id="vr-collider" obj-model="obj: url(models/vr-collider.obj)" visible="false"></a-entity> -->
+
+      <!-- ui element -->
+      <!-- <a-entity class="clickable" color-change geometry="primitive: octahedron" scale=".2 .2 .2" position="-.8 1 -1.5" material="color: #3f51b5"></a-entity> -->
+      <!-- <a-entity class="clickable" color-change geometry="primitive: octahedron" scale=".2 .2 .2" position="0 1.2 -1.5" material="color: #3f51b5"></a-entity> -->
+      <!-- <a-entity class="clickable" color-change geometry="primitive: octahedron" scale=".2 .2 .2" position=".8 1 -1.5" material="color: #3f51b5"></a-entity> -->
+
+      <!-- environment -->
+      <a-sky color="#e1f5fe"></a-sky>
+
+    </a-scene>
+
+  </body>
+</html>
